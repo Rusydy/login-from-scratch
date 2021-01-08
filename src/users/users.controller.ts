@@ -1,20 +1,33 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './interfaces/user.interface';
+import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common'
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
+  constructor(private userService:UsersService){}
   
-  constructor(private usersService: UsersService) {}
-
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto){
-    return this.usersService.create(createUserDto)
+  @Get()
+  async getUsers(){
+    const users = await this.userService.getUsers()
+    return users
   }
 
-  @Get()
-  async findAll(): Promise<User[]>{
-    return this.usersService.findAll()
+  @Post()
+  async createUser(
+    @Body('name') userName: string,
+    @Body('gender') userGender: number,
+    @Body('email') userEmail: string,
+    @Body('password') userPass: string
+  ){
+    const user = await this.userService.createUser(
+      userName,
+      userGender,
+      userEmail,
+      userPass
+    )
+    return {
+      statusCode: HttpStatus.OK,
+      message: "login success!",
+      data: user
+    }
   }
 }
