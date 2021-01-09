@@ -10,5 +10,3 @@ import { UsersService } from './users.service';
   providers: [UsersService]
 })
 export class UsersModule {}
-
-// import { userSchema } from './schemas/user.schema';
